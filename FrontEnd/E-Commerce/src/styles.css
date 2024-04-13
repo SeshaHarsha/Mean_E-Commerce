@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
+
+:root{
+    --box-shadow: 1px 1px 3px 1px #746f6f;
+    --myPrimary: #DC3545;
+}
+
+* , body{
+    font-family: "poppins", sans-serif;
+}
