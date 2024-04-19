@@ -4,6 +4,8 @@ const router = express.Router()
 const { User } = require('../models/userModel') // we are exporting as object   from UserModel so we are declaring const User object
 const bcrypt = require('bcryptjs')
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 //getting all Users
 router.get('/getUsers', async (req, res) => {
@@ -71,6 +73,32 @@ router.get('/getById/:id', async(req, res)=>{
         return res.status(200).send({
             message:"User Found",
             userDetails: userDetails
+        })
+    }
+})
+
+//Login 
+router.post('/login', async (req, res)=>{
+    const user = req.body
+    const existingUser = await User.findOne({email:user.email})
+    if(!existingUser){
+        return res.status(400).send({
+            message:"Email id is not registered please sign up before login"
+        })
+    }
+    if(existingUser && bcrypt.compareSync(user.password, existingUser.password)){
+        const payload = {
+            email: existingUser.email,
+            role: existingUser.role,
+            name: existingUser.name
+        }
+        const accessToken = jwt.sign(payload, process.env.SECRET_KEY, {expiresIn: '1d'})
+        return res.status(200).send({
+            token:accessToken
+        })
+    } else {
+        return res.status(400).send({
+            message:'Password is Incorrect'
         })
     }
 })
