@@ -10,7 +10,7 @@ require('dotenv').config()
 //getting all Users
 router.get('/getUsers', async (req, res) => {
  //const usersList = await User.find().select('name phone city').select('-password) // for not showing particular field
- const usersList = await User.find().select('name email phone city') // .select is used to filter to show particular fields
+ const usersList = await User.find().select('name email phone city password') // .select is used to filter to show particular fields
     
     if(usersList.length <= 0){
         res.status(500).send({
@@ -94,6 +94,7 @@ router.post('/login', async (req, res)=>{
         }
         const accessToken = jwt.sign(payload, process.env.SECRET_KEY, {expiresIn: '1d'})
         return res.status(200).send({
+            message:"Logged in Successfully",
             token:accessToken
         })
     } else {
