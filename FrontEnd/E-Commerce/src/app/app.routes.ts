@@ -9,5 +9,6 @@ export const routes: Routes = [
     {path:'home', component: HomeComponent},
     {path:'login', component: LoginComponent},
     {path:'register', component: RegisterComponent},
+    {path:'admin', loadChildren:()=> import('./modules/admin/admin.module').then(m=>m.AdminModule)},
     {path:'**', component: PageNoteFoundComponent}
 ];

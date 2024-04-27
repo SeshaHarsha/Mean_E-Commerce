@@ -11,3 +11,27 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 * , body{
     font-family: "poppins", sans-serif;
 }
+
+/* .error-snackbar{
+    color: #fff;
+    background-color: #DC3545;
+}
+
+.success-snackbar{
+    background-color: green;
+    color: white;
+} */
+
+.mat-mdc-snack-bar-container{
+    &.error-snackbar{
+        --mdc-snackbar-container-color: #ac030e !important;
+        --mdc-snackbar-supporting-text-color: #fff;
+    }
+}
+
+.mat-mdc-snack-bar-container{
+    &.success-snackbar{
+        --mdc-snackbar-container-color: #218503;
+        --mdc-snackbar-supporting-text-color: #fff;
+    }
+}
