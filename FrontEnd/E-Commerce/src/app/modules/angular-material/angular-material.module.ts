@@ -11,6 +11,9 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatListModule} from '@angular/material/list';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatExpansionModule} from '@angular/material/expansion';
+
 
 
 const materialComponents: any = [
@@ -25,7 +28,9 @@ const materialComponents: any = [
   MatInputModule,
   MatSnackBarModule,
   MatMenuModule,
-  MatListModule
+  MatListModule,
+  MatSidenavModule,
+  MatExpansionModule
 ];
 @NgModule({
   declarations: [],
