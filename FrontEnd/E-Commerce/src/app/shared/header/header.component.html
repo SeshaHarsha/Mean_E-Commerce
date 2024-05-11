@@ -2,36 +2,41 @@
     <span class="spacer"></span>
     <div class="top-menu">
         <span>
-            <i class="fa fa-phone" aria-hedden="true" style="font-size: 20px;"></i>:(+91) 7013536324
+            <i class="fa fa-phone" aria-hidden="true" style="font-size: 20px;"></i>: (+91) 9182256249
         </span>
         <span>About Us</span>
-        <span>Contact Us</span>
-        @if(!user){
-            <span><button mat-stroked-button color="warn" [routerLink]="'login'">Login</button></span>
-        }@else {
-            <span style="cursor: pointer;" [matMenuTriggerFor]="userMenu">{{user}}</span>
+        <span>contact Us</span>
+        <!-- @if(!user){
+            <span><button mat-stroked-button color="warn" [routerLink]="'/login'">Login</button></span>
+        } -->
+        @if( (userToken$ | async) == ''){
+            <span><button mat-stroked-button color="warn" [routerLink]="'/login'">Login</button></span>
         }
+        @else {
+            <span [matMenuTriggerFor]="userMenu" style="cursor: pointer;">{{userToken$ | async}}</span>
+        }
+        
     </div>
-</mat-toolbar>
-<mat-toolbar class="header bg-danger">
-    <span class="logo">
-        <img src="../../../assets/images/mean.png" alt="mean Logos" />
-    </span>
-    <nav class="navbar animate__animated animate__bounceInLeft">
-        <a>Home</a>
-        <a>Men</a>
-        <a>Women</a>
-        <a>Kids</a>
-    </nav>
-    <span class="spacer"></span>
-    <span>
-        <mat-icon type="button" aria-hidden="false"
-            style="font-size: 30px; margin-right:2rem; padding-top: 10px; color: azure;" matBadge="?" matBadgeColor="accent" matBadgeOverlap="false">add_shopping_cart
-        </mat-icon>
-    </span>
-</mat-toolbar>
-
-<mat-menu #userMenu>
-    <li>Profile</li>
-    <li (click)="onExit()">Exit</li>
-</mat-menu>
+    </mat-toolbar>
+    <mat-toolbar class="header bg-danger">
+        <span class="logo">
+            <img src="../../../assets/images/mean.png">
+        </span>
+        <nav class="navbar animate__animated animate__bounceInLeft"> 
+            <a>Home</a>
+            <a>Men</a>
+            <a>Women</a>
+            <a>Kids</a>
+        </nav>
+        <span class="spacer"></span>
+        <span>
+            <mat-icon type="button" style="font-size: 30px; margin-right: 2rem; padding-top:10px; color: azure" matBadge="?" matBadgeColor="accent" matBadgeOverlap="false" aria-hidden="false">add_shopping_cart</mat-icon>
+        </span>
+    </mat-toolbar>
+    
+    
+    <mat-menu #userMenu>
+        <li mat-menu-item>Profile</li>
+        <li mat-menu-item (click)="onExit()">Exit</li>
+    </mat-menu>
+    
