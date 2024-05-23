@@ -27,7 +27,8 @@
 <app-product-card
     [products]="menProducts$ | async | slice : paginate.pageIndex * paginate.pageSize : (paginate.pageIndex + 1) * paginate.pageSize"
     [menDrawer]="this" (menDrawerContentTitle)="onMenDrawerContentTitleChange($event)"
-    (menDrawerFormData)="onMenDrawerFormDataChange($event)"></app-product-card>
+    (menDrawerFormData)="onMenDrawerFormDataChange($event)"
+    (deleteEmitter)="onDeleteProductFormProductCard()"></app-product-card>
 
 <mat-paginator #paginate [length]="(menProducts$ | async)?.length" [pageSize]="4" [pageSizeOptions]="[4,8,20,40]"
     showFirstLastButtons class="bg-light p-3"></mat-paginator>
