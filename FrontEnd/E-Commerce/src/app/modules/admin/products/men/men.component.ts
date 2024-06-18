@@ -27,6 +27,8 @@ import { categoryModel, productModel } from '../../../../shared/models/model';
 import { globalProperties } from '../../../../shared/globalProperties';
 import { MatDrawer } from '@angular/material/sidenav';
 import { LoaderService } from '../../../../services/loader.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { WomenService } from '../women/womenservice';
 
 @Component({
   selector: 'app-men',
@@ -53,7 +55,6 @@ export class MenComponent implements OnInit {
   snackbar = inject(SnackbarService);
   productForm: any = FormGroup;
   formBuilder = inject(FormBuilder);
-
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -71,6 +72,16 @@ export class MenComponent implements OnInit {
   spinnerSize: number = 30;
   menDrawerContentTitle = '';
   menDrawerFormData: any = {};
+  isDrawerOpen: boolean = false;
+  activatedRoute = inject(ActivatedRoute);
+  womenProductData: any;
+  router = inject(Router);
+
+  constructor(private _womenService: WomenService) {
+    this._womenService.isOpen$.subscribe((isOpen) => {
+      this.isDrawerOpen = isOpen;
+    });
+  }
 
   ngOnInit(): void {
     this.getProducts();
@@ -90,6 +101,17 @@ export class MenComponent implements OnInit {
       color: ['', Validators.required],
       season: ['', Validators.required],
       brand: ['', Validators.required],
+    });
+
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params['openDrawer']) {
+        this._womenService.openDrawer();
+        this._womenService.formData$.subscribe((res: any) => {
+          this.menDrawerContentTitle = "Update Product"
+          this.womenProductData = res;
+        })
+        this.onMenDrawerFormDataChange(this.womenProductData)
+      }
     });
   }
 
@@ -193,6 +215,17 @@ export class MenComponent implements OnInit {
     this.menDrawerContentTitle = '';
     this.selectedImage = '';
     this.productForm.reset();
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params['openDrawer']) {
+        this._womenService.closeDrawer();
+        this.router.navigate(['admin/dashboard/products/women']);
+      }
+
+      if (params['openDrawerForKids']) {
+        //this._kidsService.closeDrawer()
+        this.router.navigate(['admin//dashboard/products/kids'])
+      }
+    });
     this.drawer.close();
   }
 
@@ -223,29 +256,33 @@ export class MenComponent implements OnInit {
 
   editProduct() {
     const productDetails = this.productForm.value;
+
     const imageFile = this.image;
+
     const formData = new FormData();
-    formData.append('name', productDetails.name);
-    formData.append('description', productDetails.description);
-    formData.append('richDescription', productDetails.richDescription);
-    formData.append('price', productDetails.price);
-    formData.append('countInStock', productDetails.countInStock);
-    formData.append('category', productDetails.category);
-    formData.append('style', productDetails.style);
-    formData.append('size', productDetails.size);
-    formData.append('color', productDetails.color);
-    formData.append('season', productDetails.season);
-    formData.append('brand', productDetails.brand);
-    formData.append('image', imageFile);
+    formData.append("name", productDetails.name);
+    formData.append("description", productDetails.description);
+    formData.append("richDescription", productDetails.richDescription);
+    formData.append("price", productDetails.price);
+    formData.append("countInStock", productDetails.countInStock);
+    formData.append("category", productDetails.category);
+    formData.append("style", productDetails.style);
+    formData.append("size", productDetails.size);
+    formData.append("color", productDetails.color);
+    formData.append("season", productDetails.season);
+    formData.append("brand", productDetails.brand);
+    formData.append("image", imageFile);
+
     const productId = this.menDrawerFormData.id;
     this.menService.updateProduct(productId, formData).subscribe({
       next: (res: any) => {
         if (res?.message) {
           this.responseMsg = res?.message;
           this.getProducts();
-          this.snackbar.openSnackbar(this.responseMsg, 'success');
+          this.snackbar.openSnackbar(this.responseMsg, "success");
         }
       },
+
       error: (err: any) => {
         if (err.error?.message) {
           this.responseMsg = err.error?.message;
@@ -253,8 +290,21 @@ export class MenComponent implements OnInit {
           this.responseMsg = globalProperties.genericError;
         }
         this.snackbar.openSnackbar(this.responseMsg, globalProperties.error);
-      },
+      }
     });
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params['openDrawer']) {
+        this, this._womenService.closeDrawer()
+        this.router.navigate(['admin/dashboard/products/women'])
+      }
+    })
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params['openDrawerForKids']) {
+        this, this._womenService.closeDrawer()
+        this.router.navigate(['admin/dashboard/products/kids'])
+      }
+    })
+
     this.drawer.close();
   }
 
